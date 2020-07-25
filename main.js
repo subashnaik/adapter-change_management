@@ -161,7 +161,7 @@ function post(serviceNowTable, callback) {
  * If either function returns data, print the returned data to console on STDOUT.
  * If either function returns an error, print the returned data to the console on STDERR.
  */
-function main() {  
+function main() {
   get('change_request', (data, error) => {
     if (error) {
       console.error(`\nError returned from GET request:\n${JSON.stringify(error)}`);
