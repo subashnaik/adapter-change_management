@@ -66,9 +66,6 @@ class ServiceNowAdapter extends EventEmitter {
       password: this.props.auth.password,
       serviceNowTable: this.props.serviceNowTable
     });
-    log.info('this.connector.url'+this.connector.url);
-    log.info('this.connector.username'+this.connector.username);
-    log.info('this.connector.password'+this.connector.password);
   }
 
   /**
@@ -87,63 +84,21 @@ class ServiceNowAdapter extends EventEmitter {
   }
 
   /**
- * @memberof ServiceNowAdapter
- * @method healthcheck
- * @summary Check ServiceNow Health
- * @description Verifies external system is available and healthy.
- *   Calls method emitOnline if external system is available.
- *
- * @param {ServiceNowAdapter~requestCallback} [callback] - The optional callback
- *   that handles the response.
- */
-healthcheck(callback) {
-     let callbackData = null;
-  let callbackError = null;
+   * @memberof ServiceNowAdapter
+   * @method healthcheck
+   * @summary Check ServiceNow Health
+   * @description Verifies external system is available and healthy.
+   *   Calls method emitOnline if external system is available.
+   *
+   * @param {ServiceNowAdapter~requestCallback} [callback] - The optional callback
+   *   that handles the response.
+   */
+  healthcheck(callback) {
+    // We will build this method in a later lab. For now, it will emulate
+    // a healthy integration by emmitting ONLINE.
+    this.emitOnline();
+  }
 
- this.getRecord( (result, error) => {
-   /**
-    * For this lab, complete the if else conditional
-    * statements that check if an error exists
-    * or the instance was hibernating. You must write
-    * the blocks for each branch.
-    */
-
-   if (error) {
-       callbackError=error;
-     /**
-      * Write this block.
-      * If an error was returned, we need to emit OFFLINE.
-      * Log the returned error using IAP's global log object
-      * at an error severity. In the log message, record
-      * this.id so an administrator will know which ServiceNow
-      * adapter instance wrote the log message in case more
-      * than one instance is configured.
-      * If an optional IAP callback function was passed to
-      * healthcheck(), execute it passing the error seen as an argument
-      * for the callback's errorMessage parameter.
-      */
-      log.info("before onfline callbackData:"+callbackError);
-      this.emitOffline();
-      log.info("after callbackData:"+callbackError);
-   } else {
-     /**
-      * Write this block.
-      * If no runtime problems were detected, emit ONLINE.
-      * Log an appropriate message using IAP's global log object
-      * at a debug severity.
-      * If an optional IAP callback function was passed to
-      * healthcheck(), execute it passing this function's result
-      * parameter as an argument for the callback function's
-      * responseData parameter.
-      */
-      callbackData=result;
-      log.info("after online callbackData:"+callbackData);
-     this.emitOnline();
-     log.info("after online callbackData:"+callbackData);
-   }
-   //return callback(callbackData, callbackError);
- });
-}
   /**
    * @memberof ServiceNowAdapter
    * @method emitOffline
@@ -200,15 +155,14 @@ healthcheck(callback) {
      let callbackData = null;
      let callbackError = null;
      this.connector.get((data, error) => {
-      if (error) {
-     // console.error(`\nError returned from GET request:\n${JSON.stringify(error)}`);
-       callbackError=error
-      }
-       callbackData=data;
-    //console.log(`\nResponse returned from GET request:\n${JSON.stringify(data)}`)
-      callback(callbackData, callbackError);
-  });
-  
+         if (error) {
+        // console.error(`\nError returned from GET request:\n${JSON.stringify(error)}`);
+        callbackError=error
+        }
+        callbackData=data;
+        callback(callbackData, callbackError);
+
+     });
   }
 
   /**
@@ -231,15 +185,14 @@ healthcheck(callback) {
      let callbackError = null;
      this.connector.post(this.connector.serviceNowTable, (data, error) => {
      if (error) {
-     // console.error(`\nError returned from GET request:\n${JSON.stringify(error)}`);
-       callbackError=error
-     }
-     callbackData=data;
-    //console.log(`\nResponse returned from GET request:\n${JSON.stringify(data)}`)
-     callback(callbackData, callbackError);
-  });
+            // console.error(`\nError returned from GET request:\n${JSON.stringify(error)}`);
+            callbackError=error
+        }
+            callbackData=data;
+            //console.log(`\nResponse returned from GET request:\n${JSON.stringify(data)}`)
+        callback(callbackData, callbackError);
+     });
   }
-
 }
 
 module.exports = ServiceNowAdapter;
