@@ -208,11 +208,16 @@ this.connector.get((data, error) => {
     var jsonstring = JSON.stringify(data);
     // jsonObject will contain a valid JavaScript object
     let jsonObject =  JSON.parse(jsonstring);//eval('(' + jsonstring + ')');
+    let servicejsonObjResult=null;
+    if(jsonObject == null){        
+        callbackData=data;
+        return callback(servicejsonObjResult, callbackError);
+    }
     let jsonbodystirng = JSON.stringify(jsonObject.body);
     let jsonresultobj = JSON.parse(jsonObject.body);
      //log.info("call data in json13:"+JSON.stringify(jsonresultobj.result[0]));
      log.info("jsonresultobj.result.length array::"+jsonresultobj.result.length);
-     let servicejsonObjResult=null;
+     
      for(let i=0;i<jsonresultobj.result.length; i++){
         let servicejsonobjarray= JSON.stringify(jsonresultobj.result[i]);     
          let jsonresultobjresultarray = JSON.parse(servicejsonobjarray);
@@ -244,40 +249,35 @@ this.connector.get((data, error) => {
    *   handles the response.
    */
   postRecord(callback) {
-    /**
-     * Write the body for this function.
-     * The function is a wrapper for this.connector's post() method.
-     * Note how the object was instantiated in the constructor().
-     * post() takes a callback function.
-     */
+      log.info("Calling ............................ppostRecord");
      let callbackData = null;
     let callbackError = null;
   
-    
-    this.connector.post(this.connector,(data, error) => {
+    this.connector.post((data, error) => {
    if (error) {
     
       callbackError=error
     }
-    callbackData=data;
-    
+    //callbackData=data;
+    log.info("PostRecord1 -------data......>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+data);
    var jsonstring = JSON.stringify(data);
-    
-    let jsonObject =  JSON.parse(jsonstring);//eval('(' + jsonstring + ')');
-    let jsonbodystirng = JSON.stringify(jsonObject.body);
+   //log.info("postRecord -------jsonstring......>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+jsonstring);
+   let jsonObject =  JSON.parse(jsonstring);
     let jsonresultobj = JSON.parse(jsonObject.body);
+    log.info("PostRecord -------jsonresultobj.result.length means the length of the array::"+jsonresultobj.result.length);
      let servicejsonobj= JSON.stringify(jsonresultobj.result[0]);
     let jsonresultobjresult = JSON.parse(servicejsonobj);
-    let servicejsonObjResult={
-                               change_ticket_number: jsonresultobjresult.number,
-                                active: jsonresultobjresult.active,
-                                priority: jsonresultobjresult.priority,
-                                description: jsonresultobjresult.description,
-                                work_start: jsonresultobjresult.work_start,
-                                work_end: jsonresultobjresult.work_end,
-                                change_ticket_key: jsonresultobjresult.sys_id
+    let serviceNowjsonResult={
+         change_ticket_number: jsonresultobjresult.number,
+         active: jsonresultobjresult.active,
+         priority: jsonresultobjresult.priority,
+         description: jsonresultobjresult.description,
+         work_start: jsonresultobjresult.work_start,
+         work_end: jsonresultobjresult.work_end,
+         change_ticket_key: jsonresultobjresult.sys_id
                             }
-        return callback(servicejsonObjResult, callbackError);
+        callbackData=data;                            
+        return callback(serviceNowjsonResult, callbackError);
   });
   }
 
