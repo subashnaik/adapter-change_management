@@ -264,8 +264,8 @@ this.connector.get((data, error) => {
    //log.info("postRecord -------jsonstring......>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+jsonstring);
    let jsonObject =  JSON.parse(jsonstring);
     let jsonresultobj = JSON.parse(jsonObject.body);
-    log.info("PostRecord -------jsonresultobj.result.length means the length of the array::"+jsonresultobj.result.length);
-     let servicejsonobj= JSON.stringify(jsonresultobj.result[0]);
+    //log.info("PostRecord -------jsonresultobj.result.length means the length of the array::"+jsonresultobj.result.length);
+     let servicejsonobj= JSON.stringify(jsonresultobj.result);
     let jsonresultobjresult = JSON.parse(servicejsonobj);
     let serviceNowjsonResult={
          change_ticket_number: jsonresultobjresult.number,

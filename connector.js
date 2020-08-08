@@ -81,8 +81,12 @@ class ServiceNowConnector {
   post(callback) {
      // log.info("calling POST in connector.>>>>>>>>>>>>>>>>>>>>>>>>>>>");
     let callOptions = this.options;
+    //let newObj = JSON.parse(JSON.stringify(callOptions));
+    log.info("1 calling POST in connector.>>>>>>>>>>>>>>>>>>>>>>>>>>>"+callOptions.query);
 	    callOptions.serviceNowTable = 'change_request';
 	    callOptions.method = 'POST';
+        callOptions.query = null;
+        log.info("2 calling POST in connector.>>>>>>>>>>>>>>>>>>>>>>>>>>>"+callOptions.query);
 	  this.sendRequest(callOptions, (results, error) => callback(results, error));
   }
 
@@ -188,11 +192,11 @@ class ServiceNowConnector {
   let me;
  // log.info("callOptions.query>>>>>>>>>>>>>>>>>>>>>>"+callOptions.query);
   if (callOptions.query){
-     // log.info("IFFFFF>>>>>>>>>>>>>>>>>>>>>>>");
+      log.info("IFFFFF>>>>>>>>>>>>>>>>>>>>>>>");
     uri = this.constructUri(callOptions.serviceNowTable, callOptions.query);
     me = 'GET';
   }else{
-   //   log.info("Else>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+      log.info("Else>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
     uri = this.constructUri(callOptions.serviceNowTable);
     me = 'POST';
   }
@@ -211,8 +215,8 @@ class ServiceNowConnector {
     baseUrl: this.options.url,
     uri,
   };
-//  log.info("sendrequest uri >>>>>>>>>>>>>>>>>>>>>>>>>>>"+uri);
- // log.info("sendrequest baseUrlbaseUrl >>>>>>>>>>>>>>>>>>>>>>>>>>>"+requestOptions.baseUrl);
+  log.info("sendrequest uri >>>>>>>>>>>>>>>>>>>>>>>>>>>"+uri);
+  log.info("sendrequest baseUrlbaseUrl >>>>>>>>>>>>>>>>>>>>>>>>>>>"+requestOptions.baseUrl);
   request(requestOptions, (error, response, body) => {
     this.processRequestResults(error, response, body, (processedResults, processedError) => callback(processedResults, processedError));
   });
